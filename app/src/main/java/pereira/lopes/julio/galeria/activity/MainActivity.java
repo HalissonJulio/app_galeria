@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
                 itens.add(myItem); // Guardando os itens na lista de itens
                 myAdapter.notifyItemInserted(itens.size()-1);
             }
