@@ -1,4 +1,4 @@
-package pereira.lopes.julio.galeria.model;
+package pereira.lopes.julio.galeria.Util;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,8 +22,9 @@ import java.util.List;
 
 import pereira.lopes.julio.galeria.R;
 import pereira.lopes.julio.galeria.adapter.MyAdapter;
+import pereira.lopes.julio.galeria.model.MainActivityViewModel;
 import pereira.lopes.julio.galeria.model.MyItem;
-import pereira.lopes.julio.galeria.model.Util;
+import pereira.lopes.julio.galeria.Util.Util;
 
 public class MainActivity extends AppCompatActivity {
     static int NEW_ITEM_REQUEST = 1; // Usado para saber qual a tela está sendo requerida
@@ -33,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView rvItens = findViewById(R.id.rvItens);
+        MainActivityViewModel vm = new ViewModelProvider( this ).get(MainActivityViewModel.class);
+        List<MyItem> itens = vm.getItens();
 
         myAdapter = new MyAdapter(this,itens);
         rvItens.setAdapter(myAdapter);
@@ -57,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode == NEW_ITEM_REQUEST){
             if (resultCode == Activity.RESULT_OK){ // Verifica se está  tudo certo
+
                 // Pegando os dados de MyItem
                 MyItem myItem = new MyItem();
                 myItem.title = data.getStringExtra("title");
@@ -71,9 +77,15 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                MainActivityViewModel vm = new ViewModelProvider( this ).get(MainActivityViewModel.class);
+
+                List<MyItem> itens = vm.getItens();
+
                 itens.add(myItem); // Guardando os itens na lista de itens
                 myAdapter.notifyItemInserted(itens.size()-1);
             }
         }
     }
+
+
 }

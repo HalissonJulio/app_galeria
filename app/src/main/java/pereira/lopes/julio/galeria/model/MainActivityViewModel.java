@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivityViewModel extends ViewModel    {
+public class MainActivityViewModel extends ViewModel {
 
     List<MyItem> itens = new ArrayList<>();
 
