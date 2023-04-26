@@ -21,7 +21,7 @@ import pereira.lopes.julio.galeria.model.NewItemActivityViewModel;
 public class NewItemActivity extends AppCompatActivity {
 
     static int PHOTO_PICKER_REQUEST = 1;
-    Uri photoSelected = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class NewItemActivity extends AppCompatActivity {
 
         NewItemActivityViewModel vm = new ViewModelProvider( this ).get(NewItemActivityViewModel.class);
 
-        Uri selectPhotoLocation = vm.getSelectPhotoLocation()
+        Uri selectPhotoLocation = vm.getSelectPhotoLocation();
 ;
         if(selectPhotoLocation != null) {
             ImageView imvfotoPreview = findViewById(R.id.imvPhotoPreview);
@@ -53,7 +53,8 @@ public class NewItemActivity extends AppCompatActivity {
             @Override
 
             public void onClick(View view) {
-                if(photoSelected == null){ // Analizando se os campos foram preenchidos
+                Uri selectPhotoLocation = vm.getSelectPhotoLocation();
+                if(selectPhotoLocation == null){ // Analizando se os campos foram preenchidos
                     Toast.makeText(NewItemActivity.this, "É necessário selecionar uma imagem!",Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -72,25 +73,28 @@ public class NewItemActivity extends AppCompatActivity {
                 }
                 // Guarda os dados acima e envia para o main
                 Intent i = new Intent();
-                i.setData(photoSelected);
+                i.setData(selectPhotoLocation);
                 i.putExtra("title",title);
                 i.putExtra("description",description);
                 setResult(Activity.RESULT_OK,i); // Falando que está tudo certo e volta pra main
                 finish();
             }
         });
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){ // 3 parametros, 1° é qual a chamada de startactivityforresult a resposta se refere, 2°cod que fala se a activity retornou com sucesso e 3° dados retornados da activity
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PHOTO_PICKER_REQUEST){ // Vemos se é igual a chamada
             if (resultCode == Activity.RESULT_OK){ // Vemos se a Activity retornou verta
-                photoSelected = data.getData(); // Pegando o URI (endereço) da imagem
+                Uri photoSelected = data.getData(); // Pegando o URI (endereço) da imagem
                 ImageView imvfotoPreview = findViewById(R.id.imvPhotoPreview); // Pegando o campo img
-                imvfotoPreview.setImageURI(photoSelected); // Colocando o endereço no campo imagem
+
+                imvfotoPreview.setImageURI( photoSelected ); // Colocando o endereço no campo imagem
+
+                NewItemActivityViewModel vm = new ViewModelProvider( this ).get( NewItemActivityViewModel.class );
+                vm.selectPhotoLocation(photoSelected);
+
             }
         }
     }
-
 }
